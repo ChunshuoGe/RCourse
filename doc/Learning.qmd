@@ -8,7 +8,7 @@ format: html
 #| include: false
 library(tidyverse)
 nhanes_small <- read_csv(here::here("data/nhanes_small.csv"))
-#you can only have one setup chunk in one document
+# you can only have one setup chunk in one document
 ```
 
 
@@ -18,19 +18,72 @@ nhanes_small <- read_csv(here::here("data/nhanes_small.csv"))
 #| echo: false
 #| warning: false
 nhanes_small %>%
-  filter(
-    !is.na(diabetes),
-    !is.na(phys_active)
-  ) %>%
-  group_by(
-    diabetes,
-    education
-  ) %>%
+  filter(!is.na(diabetes),!is.na(education)) %>%
+  group_by(diabetes,education) %>%
   summarise(
     max_bmi = max(bmi, na.rm = TRUE),
     min_bmi = min(bmi, na.rm = TRUE)
-  ) %>% 
-ungroup() %>% 
+  ) %>%
+  ungroup() %>%
   knitr::kable(caption = "Mean Values of Age and bmi for each diabetes and physical activity status")
 ```
 
+## Prettier table
+
+```{r prettier-table}
+#| echo: false
+#| warning: false
+nhanes_small %>%
+  filter(
+    !is.na(diabetes),
+    !is.na(education)
+  ) %>%
+  group_by(diabetes, education) %>%
+  summarise(
+    mean_age = mean(age, na.rm = TRUE),
+    mean_bmi = mean(bmi, na.rm = TRUE)
+  ) %>%
+  ungroup() %>%
+  mutate(
+    mean_age = round(mean_age, 1),
+    mean_bmi = round(mean_bmi, 1),
+    str_to_sentence(education)
+  ) %>%
+  rename(
+    "Diabetes Status" = diabetes,
+    Education = education,
+    "Mean Age" = mean_age,
+    "Mean BMI" = mean_bmi
+  ) %>%
+  knitr::kable(caption = "Mean Values of Age and bmi for each diabetes and physical activity status")
+```
+
+
+# YAML
+
+- Chunshuo Ge
+- ESA, TME, Chalmers
+
+# Intro
+
+**This is an intro**
+
+# Methods and Results
+
+*These are the methods and results.*
+
+## Analysis
+
+This is my^analysis^. 
+
+# Discussion
+
+This is the~discussion~.
+
+The mean of BMI is `r 2 + 2`
+
+## Inserting images
+
+![kitty kitty.](images/kitty.png){#fig-cat}
+
+Cute kitten in @fig-cat
