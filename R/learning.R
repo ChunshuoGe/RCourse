@@ -1,3 +1,5 @@
+This is an example of a conflict.
+
 10
 10
 10
