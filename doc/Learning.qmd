@@ -3,3 +3,34 @@ title: "Reproduciable documents"
 author: "Chunshuo Ge"
 format: html
 ---
+
+```{r setup}
+#| include: false
+library(tidyverse)
+nhanes_small <- read_csv(here::here("data/nhanes_small.csv"))
+#you can only have one setup chunk in one document
+```
+
+
+## Table of results
+
+```{r mean-age-bmi-table}
+#| echo: false
+#| warning: false
+nhanes_small %>%
+  filter(
+    !is.na(diabetes),
+    !is.na(phys_active)
+  ) %>%
+  group_by(
+    diabetes,
+    education
+  ) %>%
+  summarise(
+    max_bmi = max(bmi, na.rm = TRUE),
+    min_bmi = min(bmi, na.rm = TRUE)
+  ) %>% 
+ungroup() %>% 
+  knitr::kable(caption = "Mean Values of Age and bmi for each diabetes and physical activity status")
+```
+

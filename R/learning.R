@@ -161,7 +161,13 @@ nhanes_small %>%
   summarise(
     max_bmi = max(bmi, na.rm = TRUE),
     min_bmi = min(bmi, na.rm = TRUE)
-  )
+  ) %>%
+
+ungroup()
+
+nhanes_small %>%
+  summarise(bmi)
+
 
 write.csv(
   nhanes_small,
